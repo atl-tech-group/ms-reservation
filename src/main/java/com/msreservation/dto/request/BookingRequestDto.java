@@ -1,8 +1,5 @@
 package com.msreservation.dto.request;
 
-import com.msreservation.entity.Payment;
-import com.msreservation.enums.BookingStatus;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

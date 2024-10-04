@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PropertyResponse {
+public class PropertyResponseFein {
     private Long id;
 }
