@@ -6,13 +6,11 @@ import com.msreservation.dto.request.BookingRequestDto;
 import com.msreservation.dto.request.PaymentRequestDto;
 import com.msreservation.dto.response.AuthResponseDto;
 import com.msreservation.dto.response.BookingResponseDto;
-import com.msreservation.dto.response.PropertyResponse;
+import com.msreservation.dto.response.PropertyResponseFein;
 import com.msreservation.entity.Booking;
 import com.msreservation.entity.Payment;
 import com.msreservation.repository.BookingRepository;
 import com.msreservation.repository.PaymentRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,7 @@ public class BookingService {
     public BookingResponseDto createBooking(BookingRequestDto bookingRequestDto) {
 
         AuthResponseDto authResponseDto = authClient.getUserById(bookingRequestDto.getUserId()).getBody();
-        PropertyResponse propertyResponse = propertyClient.getPropertyById(bookingRequestDto.getUserId());
+        PropertyResponseFein propertyResponse = propertyClient.getForFeinPropertyById(bookingRequestDto.getPropertyId());
 
         Booking booking = new Booking();
 
