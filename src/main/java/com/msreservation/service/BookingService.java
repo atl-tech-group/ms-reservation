@@ -1,6 +1,7 @@
 package com.msreservation.service;
 
 import com.msreservation.client.AuthClient;
+import com.msreservation.client.PaymentClient;
 import com.msreservation.client.PropertyClient;
 import com.msreservation.dto.request.BookingRequestDto;
 import com.msreservation.dto.request.PaymentRequestDto;
@@ -8,9 +9,8 @@ import com.msreservation.dto.response.AuthResponseDto;
 import com.msreservation.dto.response.BookingResponseDto;
 import com.msreservation.dto.response.PropertyResponseFein;
 import com.msreservation.entity.Booking;
-import com.msreservation.entity.Payment;
+import com.msreservation.enums.BookingStatus;
 import com.msreservation.repository.BookingRepository;
-import com.msreservation.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    private final PaymentRepository paymentRepository;
+    private final PaymentClient paymentClient;
     private final AuthClient authClient;
     private final PropertyClient propertyClient;
 
@@ -66,17 +66,9 @@ public class BookingService {
 
     public void addPaymentToBooking(Long bookingId, PaymentRequestDto paymentRequestDto) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Reservation not ById " + bookingId));
-
-        Payment payment = new Payment();
-        payment.setPaymentDate(LocalDate.now());
-        payment.setAmount(paymentRequestDto.getAmount());
-        payment.setPaymentMethod(paymentRequestDto.getPaymentMethod());
-
-        paymentRepository.save(payment);
-
-        booking.setPayment(payment);
+        paymentClient.createPayment(paymentRequestDto);
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
         bookingRepository.save(booking);
-
     }
 
     private BigDecimal calculateTotalPrice(BigDecimal nightlyPrice, LocalDate checkInDate, LocalDate checkinOutDate) {

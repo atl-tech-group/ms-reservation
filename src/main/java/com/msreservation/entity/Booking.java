@@ -30,10 +30,4 @@ public class Booking implements Serializable {
 
     @Enumerated(value = EnumType.STRING)
     private BookingStatus bookingStatus;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
-    private Payment payment;
-
-
 }
